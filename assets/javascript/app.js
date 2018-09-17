@@ -36,7 +36,7 @@ $(document).ready(function () {
     var correctCount = 0;
     var incorrectCount = 0;
     var unansweredCount = 0;
-    var picked;
+    var q;
     var secondArray = [];
     var placeholderArray = [];
     var qIndex;
@@ -76,7 +76,7 @@ $(document).ready(function () {
         if (perQuestionTimer === 0) {
             unansweredCount++;
             stopTimer();
-            $("#result-window").html("<p>Hello!???! The correct answer was: " + picked.choices[picked.answer] + "</p>");
+            $("#result-window").html("<p>Hello!???! The correct answer was: " + q.choices[q.answer] + "</p>");
             hideImage();
         }
     }
@@ -88,21 +88,21 @@ $(document).ready(function () {
 
     function showQuestion() {
         qIndex = Math.floor(Math.random() * questionsArray.length);
-        picked = questionsArray[qIndex];
+        q = questionsArray[qIndex];
 
-        $("#question-window").html("<p>" + picked.question + "</p>");
-        for (var i = 0; i < picked.choices.length; i++) {
+        $("#question-window").html("<p>" + q.question + "</p>");
+        for (var i = 0; i < q.choices.length; i++) {
             var userChoice = $("<div>");
             userChoice.addClass("answerchoice");
-            userChoice.html(picked.choices[i]);
-            userChoice.attr("data-guessvalue", i);
+            userChoice.html(q.choices[i]);
+            userChoice.attr("valueOfGuess", i);
             $("#result-window").append(userChoice);
         }
         $(".answerchoice").on("click", function () {
-            userGuess = parseInt($(this).attr("data-guessvalue"))
+            userGuess = parseInt($(this).attr("valueOfGuess"))
             console.log(userGuess);
 
-            if (userGuess === picked.answer) {
+            if (userGuess === q.answer) {
                 stopTimer();
                 correctCount++;
                 userGuess = "";
@@ -112,15 +112,15 @@ $(document).ready(function () {
                 stopTimer();
                 incorrectCount++;
                 userGuess = "";
-                $("#result-window").html("<p>Oops. The correct answer we were looking for was: " + picked.choices[picked.answer] + "</p>");
+                $("#result-window").html("<p>Oops. The correct answer we were looking for was: " + q.choices[q.answer] + "</p>");
                 hideImage();
             }
         })
     }
 
     function hideImage() {
-        $("#result-window").append("<img src=" + picked.image + ">");
-        secondArray.push(picked);
+        $("#result-window").append("<img src=" + q.image + ">");
+        secondArray.push(q);
         questionsArray.splice(qIndex, 1);
 
         setTimeout(function () {
